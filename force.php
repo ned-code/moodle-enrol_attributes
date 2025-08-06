@@ -21,9 +21,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('AJAX_SCRIPT', true);
+const AJAX_SCRIPT = true;
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/config.php');
+require_once(dirname(__FILE__, 3). '/config.php');
 require_once('lib.php');
 
 require_sesskey();
@@ -31,13 +31,13 @@ require_sesskey();
 $courseid = required_param('courseid', PARAM_INT);
 $instanceid = required_param('instanceid', PARAM_INT);
 
-$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 $context = context_course::instance($course->id);
 
 require_login($course);
 require_capability('enrol/attributes:config', $context);
 
-if (!$courseid || !$instanceid) {
+if (!$courseid || !$instanceid){
     print_string('ajax-error', 'enrol_attributes');
     exit;
 }
@@ -46,7 +46,7 @@ $nbenrolled = enrol_attributes_plugin::process_enrolments(null, $instanceid);
 
 ob_end_clean();
 
-if ($nbenrolled !== false) {
+if ($nbenrolled !== false){
     echo json_encode(get_string('ajax-okforced', 'enrol_attributes', $nbenrolled));
 }
 else {

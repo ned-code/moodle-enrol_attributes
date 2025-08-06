@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once $CFG->dirroot . '/enrol/attributes/locallib.php';
 
-if ($ADMIN->fulltree) {
+if ($ADMIN->fulltree){
 
     // Default role
     $options = get_default_enrol_roles(context_system::instance());
@@ -49,33 +49,33 @@ if ($ADMIN->fulltree) {
 
     // Fields to use in the selector
     $customfieldrecords = $DB->get_records('user_info_field');
-    if ($customfieldrecords) {
+    if ($customfieldrecords){
         $profilefields = explode(',', get_config('enrol_attributes', 'profilefields'));
         $profilefieldselected = false;
-        foreach ($customfieldrecords as $customfieldrecord) {
-            foreach ($profilefields as $profilefield) {
-                if ($profilefield === $customfieldrecord->shortname) {
+        foreach ($customfieldrecords as $customfieldrecord){
+            foreach ($profilefields as $profilefield){
+                if ($profilefield === $customfieldrecord->shortname){
                     $profilefieldselected = true;
                     break;
                 }
             }
         }
 
-        if (!$profilefieldselected && !(defined('PHPUNIT_TEST') && PHPUNIT_TEST) && enrol_is_enabled('attributes')) {
+        if (!$profilefieldselected && !(defined('PHPUNIT_TEST') && PHPUNIT_TEST) && enrol_is_enabled('attributes')){
             \core\notification::warning(
                 get_string('no_profile_field_selected', 'enrol_attributes', $CFG->wwwroot . '/user/profile/index.php')
             );
         }
 
         $customfields = [];
-        foreach ($customfieldrecords as $customfieldrecord) {
+        foreach ($customfieldrecords as $customfieldrecord){
             $customfields[$customfieldrecord->shortname] = $customfieldrecord->name;
         }
         asort($customfields);
         $settings->add(new admin_setting_configmultiselect('enrol_attributes/profilefields',
                 get_string('profilefields', 'enrol_attributes'), get_string('profilefields_desc', 'enrol_attributes'),
                 [], $customfields));
-    } else if (!(defined('PHPUNIT_TEST') && PHPUNIT_TEST) && enrol_is_enabled('attributes')) {
+    } elseif (!(defined('PHPUNIT_TEST') && PHPUNIT_TEST) && enrol_is_enabled('attributes')){
         // The warning needs to be given only if unit tests are not running.
         // Otherwise some core tests might fail.
         \core\notification::warning(get_string('no_custom_field', 'enrol_attributes',$CFG->wwwroot . '/user/profile/index.php'));
@@ -86,7 +86,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configcheckbox('enrol_attributes/observelogins', get_string('observelogins', 'enrol_attributes'), get_string('observelogins_desc', 'enrol_attributes'), 1));
 
     // Fields to update via Shibboleth login
-    if (in_array('shibboleth', get_enabled_auth_plugins())) {
+    if (in_array('shibboleth', get_enabled_auth_plugins())){
         $settings->add(new admin_setting_configtextarea('enrol_attributes/mappings',
                 get_string('mappings', 'enrol_attributes'), get_string('mappings_desc', 'enrol_attributes'), '',
                 PARAM_TEXT, 60, 10));

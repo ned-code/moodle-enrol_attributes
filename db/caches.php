@@ -23,9 +23,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$definitions = array(
-        'dbquerycache' => array(
+$definitions = [
+    'dbquerycache' => [
                 'mode' => cache_store::MODE_APPLICATION
-        ),
-);
+    ],
+];
 

@@ -21,33 +21,33 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$observers = array(
-        array(
+$observers = [
+    [
                 'eventname'   => '\core\event\user_loggedin',
                 'callback'    => 'enrol_attributes_plugin::process_login',
                 'includefile' => '/enrol/attributes/lib.php',
                 'internal'    => true,
                 'priority'    => 9999,
-        ),
-        array(
+    ],
+    [
                 'eventname'   => '\core\event\user_updated',
                 'callback'    => 'enrol_attributes_plugin::handle_profile_update',
                 'includefile' => '/enrol/attributes/lib.php',
                 'internal'    => true,
                 'priority'    => 9999,
-        ),
-        array(
+    ],
+    [
                 'eventname'   => '\core\event\user_info_field_updated',
                 'callback'    => 'enrol_attributes_plugin::handle_profile_update',
                 'includefile' => '/enrol/attributes/lib.php',
                 'internal'    => true,
                 'priority'    => 9999,
-        ),
-        array(
+    ],
+    [
                 'eventname'   => '\core\event\user_info_category_updated',
                 'callback'    => 'enrol_attributes_plugin::handle_profile_update',
                 'includefile' => '/enrol/attributes/lib.php',
                 'internal'    => true,
                 'priority'    => 9999,
-        ),
-);
+    ],
+];

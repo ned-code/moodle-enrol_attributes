@@ -21,21 +21,21 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-define('CLI_SCRIPT', true);
+const CLI_SCRIPT = true;
 
 require_once(dirname(__FILE__) . '/../../../config.php');
 require_once("$CFG->libdir/clilib.php");
 require_once($CFG->dirroot . '/enrol/attributes/lib.php');
 
 // Now get cli options.
-list($options, $unrecognized) = cli_get_params(array('help' => false), array('h' => 'help'));
+[$options, $unrecognized] = cli_get_params(['help' => false], ['h' => 'help']);
 
-if ($unrecognized) {
+if ($unrecognized){
     $unrecognized = implode("\n  ", $unrecognized);
     cli_error(get_string('cliunknowoption', 'admin', $unrecognized));
 }
 
-if ($options['help']) {
+if ($options['help']){
     $help = "Execute enrol sync with user profile attributes.
 The enrol_attributes plugin must be enabled and properly configured.
 
@@ -50,7 +50,7 @@ Example:
     die;
 }
 
-if (!enrol_is_enabled('attributes')) {
+if (!enrol_is_enabled('attributes')){
     cli_error('enrol_attributes plugin is disabled, synchronisation stopped', 2);
 }
 

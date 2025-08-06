@@ -23,6 +23,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-function xmldb_enrol_attributes_install() {
+function xmldb_enrol_attributes_install(){
 }
 

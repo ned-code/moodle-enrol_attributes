@@ -27,11 +27,13 @@ require_once($CFG->libdir . '/formslib.php');
 require_once $CFG->dirroot . '/enrol/attributes/locallib.php';
 
 class enrol_attributes_edit_form extends moodleform {
-
-    function definition() {
+    /**
+     * Form definition
+     * @noinspection PhpOverridingMethodVisibilityInspection
+     */
+    public function definition(){
         global $DB;
         $mform = $this->_form;
-
 
         [$instance, $plugin, $context] = $this->_customdata;
 
@@ -48,40 +50,41 @@ class enrol_attributes_edit_form extends moodleform {
         $courseid = required_param('courseid', PARAM_INT);
         $groups = groups_get_all_groups($courseid);
 
-        if (count($groups)) {
-            $groups2 = array();
-            foreach ($groups as $value) {
+        if (count($groups)){
+            $groups2 = [];
+            foreach ($groups as $value){
                 $groups2[$value->id] = $value->name;
             }
 
             $groupselector = $mform->addElement('autocomplete', 'groupselect', get_string('group', 'enrol_attributes'),
-                    $groups2);
+                $groups2);
             $groupselector->setMultiple(true);
             $mform->addHelpButton('groupselect', 'group', 'enrol_attributes');
 
             $recordgroups =
-                    (property_exists($instance, 'customtext1') && property_exists(json_decode($instance->customtext1), 'groups')) ? json_decode($instance->customtext1)->groups : [];
+                (property_exists($instance, 'customtext1') && property_exists(json_decode($instance->customtext1), 'groups')) ?
+                    json_decode($instance->customtext1)->groups : [];
             $recordgroups === [] ?: $groupselector->setSelected($recordgroups);
-        }
-        else {
-            $groupselector = $mform->addElement('static', 'groupselect', get_string('group', 'enrol_attributes'), html_writer::div(get_string('nogroups', 'group'), 'alert alert-info'));
+        } else{
+            $groupselector = $mform->addElement('static', 'groupselect', get_string('group', 'enrol_attributes'),
+                html_writer::div(get_string('nogroups', 'group'), 'alert alert-info'));
             $mform->addHelpButton('groupselect', 'group', 'enrol_attributes');
         }
 
-
         // End modification
-        $mform->addElement('textarea', 'customtext1', get_string('attrsyntax', 'enrol_attributes'), array(
-                'cols' => '60',
-                'rows' => '8'
-        ));
+        $mform->addElement('textarea', 'customtext1', get_string('attrsyntax', 'enrol_attributes'), [
+            'cols' => '60',
+            'rows' => '8',
+        ]);
         $mform->addHelpButton('customtext1', 'attrsyntax', 'enrol_attributes');
 
-        $mform->addElement('html', '<div class="alert alert-warning alert-block fade in" role="alert" data-aria-autofocus="true">' . get_string('listitem_description', 'enrol_attributes') . '</div>');
+        $mform->addElement('html', '<div class="alert alert-warning alert-block fade in" role="alert" data-aria-autofocus="true">'.
+            get_string('listitem_description', 'enrol_attributes').'</div>');
 
         $whenexpiredoptions = [
-                ENROL_ATTRIBUTES_WHENEXPIREDDONOTHING => get_string('whenexpireddonothing', 'enrol_attributes'),
-                ENROL_ATTRIBUTES_WHENEXPIREDREMOVE => get_string('whenexpiredremove', 'enrol_attributes'),
-                ENROL_ATTRIBUTES_WHENEXPIREDSUSPEND => get_string('whenexpiredsuspend', 'enrol_attributes'),
+            ENROL_ATTRIBUTES_WHENEXPIREDDONOTHING => get_string('whenexpireddonothing', 'enrol_attributes'),
+            ENROL_ATTRIBUTES_WHENEXPIREDREMOVE    => get_string('whenexpiredremove', 'enrol_attributes'),
+            ENROL_ATTRIBUTES_WHENEXPIREDSUSPEND   => get_string('whenexpiredsuspend', 'enrol_attributes'),
         ];
         $mform->addElement('select', 'customint1', get_string('whenexpired', 'enrol_attributes'), $whenexpiredoptions);
         $mform->setDefault('customint1', $plugin->get_config('default_whenexpired'));
@@ -97,25 +100,25 @@ class enrol_attributes_edit_form extends moodleform {
         $this->set_data($instance);
     }
 
-    function add_action_buttons($cancel = true, $submitlabel = null) {
-        if (is_null($submitlabel)) {
+    public function add_action_buttons($cancel = true, $submitlabel = null){
+        if (is_null($submitlabel)){
             $submitlabel = get_string('savechanges');
         }
         $mform =& $this->_form;
-        if ($cancel) {
+        if ($cancel){
             //when two elements we need a group
-            $buttonarray = array();
+            $buttonarray = [];
             $buttonarray[] = &$mform->createElement('submit', 'submitbutton', $submitlabel);
             $buttonarray[] = &$mform->createElement('cancel');
-            $buttonarray[] = &$mform->createElement('button', 'purge', get_string('purge', 'enrol_attributes'), array(
-                    'onclick' => 'enrol_attributes_purge(\'' . addslashes(get_string('confirmpurge',
-                                    'enrol_attributes')) . '\');'
-            ));
-            $buttonarray[] = &$mform->createElement('button', 'force', get_string('force', 'enrol_attributes'), array(
-                    'onclick' => 'enrol_attributes_force(\'' . addslashes(get_string('confirmforce',
-                                    'enrol_attributes')) . '\');'
-            ));
-            $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+            $buttonarray[] = &$mform->createElement('button', 'purge', get_string('purge', 'enrol_attributes'), [
+                'onclick' => 'enrol_attributes_purge(\''.addslashes(get_string('confirmpurge',
+                        'enrol_attributes')).'\');',
+            ]);
+            $buttonarray[] = &$mform->createElement('button', 'force', get_string('force', 'enrol_attributes'), [
+                'onclick' => 'enrol_attributes_force(\''.addslashes(get_string('confirmforce',
+                        'enrol_attributes')).'\');',
+            ]);
+            $mform->addGroup($buttonarray, 'buttonar', '', [' '], false);
             $mform->closeHeaderBefore('buttonar');
         }
     }

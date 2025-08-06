@@ -23,23 +23,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$capabilities = array(
+$capabilities = [
 
-        'enrol/attributes:config' => array(
+    'enrol/attributes:config' => [
                 'captype'      => 'write',
                 'contextlevel' => CONTEXT_COURSE,
-                'archetypes'   => array(
+                'archetypes'   => [
                         'manager' => CAP_ALLOW,
-                )
-        ),
-        'enrol/attributes:manage' => array(
+                ]
+    ],
+    'enrol/attributes:manage' => [
                 'captype'      => 'write',
                 'contextlevel' => CONTEXT_COURSE,
-                'archetypes'   => array(
+                'archetypes'   => [
                         'manager' => CAP_ALLOW,
                         'editingteacher' => CAP_ALLOW,
-                )
-        ),
+                ]
+    ],
 
-);
+];
 

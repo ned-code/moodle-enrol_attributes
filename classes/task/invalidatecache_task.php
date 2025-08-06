@@ -30,14 +30,14 @@ class invalidatecache_task extends \core\task\scheduled_task {
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name(){
         return 'Invalidate cache for Enrol by user profile fields';
     }
 
     /**
      * Run cron.
      */
-    public function execute() {
+    public function execute(){
         $cache = \cache::make('enrol_attributes', 'dbquerycache');
         $cache->purge();
     }

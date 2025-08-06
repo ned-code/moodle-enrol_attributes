@@ -23,12 +23,12 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-function xmldb_enrol_attributes_upgrade($oldversion) {
+function xmldb_enrol_attributes_upgrade($oldversion){
     global $CFG, $DB;
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2021082408) {
+    if ($oldversion < 2021082408){
 
         // Define table
         $table = new xmldb_table('enrol_attributes_groups');
@@ -44,7 +44,7 @@ function xmldb_enrol_attributes_upgrade($oldversion) {
         $table->add_key('group', XMLDB_KEY_FOREIGN, ['groupid'], 'groups', ['id']);
 
         // Create table if not exist
-        if (!$dbman->table_exists($table)) {
+        if (!$dbman->table_exists($table)){
             $dbman->create_table($table);
         }
 

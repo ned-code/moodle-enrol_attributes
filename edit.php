@@ -27,20 +27,20 @@ require_once('edit_form.php');
 $courseid = required_param('courseid', PARAM_INT);
 $instanceid = optional_param('id', 0, PARAM_INT); // instanceid
 
-$course = $DB->get_record('course', array('id' => $courseid), '*', MUST_EXIST);
+$course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
 $context = context_course::instance($course->id);
 
 require_login($course);
 require_capability('enrol/attributes:config', $context);
 
-$PAGE->set_url('/enrol/attributes/edit.php', array(
+$PAGE->set_url('/enrol/attributes/edit.php', [
         'courseid' => $course->id,
         'id'       => $instanceid
-));
+]);
 $PAGE->set_pagelayout('admin');
 
-$return = new moodle_url('/enrol/instances.php', array('id' => $course->id));
-if (!enrol_is_enabled('attributes')) {
+$return = new moodle_url('/enrol/instances.php', ['id' => $course->id]);
+if (!enrol_is_enabled('attributes')){
     redirect($return);
 }
 
@@ -52,34 +52,34 @@ if(!$DB->get_records('user_info_field')){
 
 $plugin = enrol_get_plugin('attributes');
 
-if ($instanceid) {
-    $instance = $DB->get_record('enrol', array(
+if ($instanceid){
+    $instance = $DB->get_record('enrol', [
             'courseid' => $course->id,
             'enrol'    => 'attributes',
             'id'       => $instanceid
-    ), '*', MUST_EXIST);
+    ], '*', MUST_EXIST);
 }
 else {
     require_capability('moodle/course:enrolconfig', $context);
     // no instance yet, we have to add new instance
-    navigation_node::override_active_url(new moodle_url('/enrol/instances.php', array('id' => $course->id)));
+    navigation_node::override_active_url(new moodle_url('/enrol/instances.php', ['id' => $course->id]));
     $instance = new stdClass();
     $instance->id = null;
     $instance->courseid = $course->id;
 }
 
-$mform = new enrol_attributes_edit_form(null, array(
+$mform = new enrol_attributes_edit_form(null, [
         $instance,
         $plugin,
         $context
-));
+]);
 
-if ($mform->is_cancelled()) {
+if ($mform->is_cancelled()){
     redirect($return);
 }
-elseif ($data = $mform->get_data()) {
+elseif ($data = $mform->get_data()){
 
-    if ($instance->id) {
+    if ($instance->id){
         $instance->name = $data->name;
         $instance->roleid = $data->roleid;
         $instance->customint1 = isset($data->customint1) ? ($data->customint1) : 0;
@@ -90,12 +90,12 @@ elseif ($data = $mform->get_data()) {
         // End modification
     }
     else {
-        $fields = array(
+        $fields = [
                 'name'        => $data->name,
                 'roleid'      => $data->roleid,
                 'customint1'  => isset($data->customint1) ? ($data->customint1) : 0,
                 'customtext1' => getRulesWithGroups($data)
-        );
+        ];
         $id = $plugin->add_instance($course, $fields);
     }
 
@@ -120,7 +120,7 @@ $PAGE->set_title(get_string('pluginname', 'enrol_attributes'));
 $PAGE->requires->jquery();
 $PAGE->requires->js('/enrol/attributes/jsparams.php');
 $PAGE->requires->js('/enrol/attributes/js/jquery.booleanEditor.js');
-$PAGE->requires->strings_for_js(array('addcondition', 'addgroup', 'deletecondition'), 'enrol_attributes');
+$PAGE->requires->strings_for_js(['addcondition', 'addgroup', 'deletecondition'], 'enrol_attributes');
 $PAGE->requires->js('/enrol/attributes/js/javascript.js');
 
 echo $OUTPUT->header();
@@ -128,7 +128,7 @@ echo $OUTPUT->heading(get_string('pluginname', 'enrol_attributes'));
 $mform->display();
 
 // DEBUGGING : BEGIN
-if ($instanceid) {
+if ($instanceid){
     debugging('customtext1= ' . print_r(json_decode($instance->customtext1), true), DEBUG_DEVELOPER);
     $debug_fieldsandrules = enrol_attributes_plugin::attrsyntax_toarray($instance->customtext1);
     debugging('fieldsandrules= ' . print_r($debug_fieldsandrules, true), DEBUG_DEVELOPER);

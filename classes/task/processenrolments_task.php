@@ -30,14 +30,14 @@ class processenrolments_task extends \core\task\scheduled_task {
      *
      * @return string
      */
-    public function get_name() {
+    public function get_name(){
         return 'Process all rules and enrolments for Enrol by user profile fields';
     }
 
     /**
      * Run cron.
      */
-    public function execute() {
+    public function execute(){
         global $CFG;
         require_once ($CFG->dirroot . '/enrol/attributes/lib.php');
         \enrol_attributes_plugin::process_enrolments();
